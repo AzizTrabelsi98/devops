@@ -8,9 +8,9 @@ pipeline{
 
         stage('Getting project from Git') {
             steps{
-      			checkout([$class: 'GitSCM', branches: [[name: '*/main']],
+      			checkout([$class: 'GitSCM', branches: [[name: '*/amirjebari-5twin5-G6']],
 			extensions: [],
-			userRemoteConfigs: [[url: 'https://github.com/AzizTrabelsi98/devops.git']]])
+			userRemoteConfigs: [[url: 'https://github.com/5twin5-G6-SkyStation/5twin5-G6-SkyStation.git']]])
             }
         }
 
@@ -42,7 +42,7 @@ pipeline{
         stage('Code Quality Check via SonarQube') {
             steps{
 
-             		sh " mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url=http://192.168.1.21:9000 -Dsonar.token=sqp_967f7ce856cba9eaaff2c1d53a4c9da867b1b7eb"
+             		sh " mvn clean verify sonar:sonar -Dsonar.projectKey=cicd -Dsonar.projectName='cicd' -Dsonar.host.url=http://172.10.0.140:9000 -Dsonar.token=sqp_967f7ce856cba9eaaff2c1d53a4c9da867b1b7eb"
 
             }
         }
@@ -52,8 +52,7 @@ pipeline{
             steps {
 
 
-  sh 'mvn clean package deploy:deploy-file -DgroupId=tn.esprit.spring -DartifactId=gestion-station-ski -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar -DrepositoryId=maven-releases -Durl=http://192.168.1.21:8081/repository/maven-releases/ -Dfile=target/gestion-station-ski-1.0.jar'
-
+  sh 'mvn clean package deploy:deploy-file -DgroupId=tn.esprit.spring -DartifactId=gestion-station-ski -Dversion=1.0 -DgeneratePom=true -Dpackaging=jar -DrepositoryId=maven-releases -Durl=http://172.10.0.140:8081/repository/maven-releases/ -Dfile=target/gestion-station-ski-1.0.jar'
 
             }
         }
@@ -61,21 +60,20 @@ pipeline{
 stage('Build Docker Image') {
                       steps {
                           script {
-                            sh 'docker build -t azizoss/spring-app-twin:first .'
+                            sh 'docker build -t azizoss/spring-app-twin:latest .'
                           }
                       }
                   }
 
                   stage('login dockerhub') {
                                         steps {
-                                     // sh 'echo dckr_pat_-SnwrdC_ELsL6it2JT6cgIcAlrs | docker login -u azizbenhaha --password-stdin'
-				sh 'docker login -u azizoss --password dckr_pat_9wYLJvVisxnXRtwPxxHrxFZt_Dw'
+				sh 'docker login -u azizoss --password dckr_pat_v9UjMySVbpzx2SmxlGfY7MsMik8'
                                             }
 		  }
 	    
 	                      stage('Push Docker Image') {
                                         steps {
-                                   sh 'docker push azizoss/spring-app-twin:first'
+                                   sh 'docker push azizoss/spring-app-twin:second'
                                             }
 		  }
 
